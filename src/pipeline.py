@@ -56,6 +56,7 @@ class pipeline_json(object):
         OUTPUT:
             y - (numpy array) Boolean of Fraud (1) / Not Fraud (0)
         """
+        self._add_features()
         return self.df['fraud']
 
     def _convert_datetime(self):
