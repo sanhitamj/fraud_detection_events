@@ -3,9 +3,15 @@ Creates a pipelined dataframe to
 local notebook
 
 ------------
+TO RUN FROM SUBFOLDERS:
+import os
+import sys
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path)
 
+---------
 EXAMPLE USE IN NOTEBOOK:
-
 from src.pipeline import pipeline_json
 pj = pipeline_json('../data/data.json')
 df = pj.convert_to_df(scaling=False, filtered=False)
@@ -14,6 +20,10 @@ ARGS    convert_to_df
     -- scaling (Default: False) Scales specific columns
     -- filtered (Default: False) Returns specific columns
 
+-------
+FOR FITTING:
+X = pj.convert_to_df(scaling=True, filtered=True)
+y = pj.output_labelarray()
 
 -Tyler
 """
@@ -27,6 +37,10 @@ class pipeline_json(object):
     def __init__(self, json_dir="../data/data.json"):
         self.orig_df = pd.read_json(json_dir)
 
+
+
+
+
     def convert_to_df(self, scaling=False, filtered=False):
         #Avoid re-reading JSON file every time conversion is done by copying original dataframe.
         self.df = self.orig_df.copy()
@@ -35,6 +49,7 @@ class pipeline_json(object):
         self._convert_datetime()
         self._convert_bools()
         self._add_features()
+
 
         if filtered:
             self._filter_features()
@@ -53,7 +68,7 @@ class pipeline_json(object):
         OUTPUT:
             y - (numpy array) Boolean of Fraud (1) / Not Fraud (0)
         """
-        return self.df['fraud']
+        return self.convert_to_df()['fraud']
 
     def _convert_datetime(self):
         # Wallace edit
