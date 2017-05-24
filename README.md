@@ -37,5 +37,11 @@ df['account_life'] = df['account_life'].dt.days
 Fraud| 87|
 Non-Fraud| 402|
 
+The 87 days are likely due to fraud being identified late.
+
+![Description Ratio](images/acctcutoff.png)
+
+It is better to leave this as a scaled linear feature.
+
 # Data Pipeline
 _Used for coworking in git using merges_
