@@ -120,7 +120,7 @@ class pipeline_json(object):
         # Lifetime of event
         self.df['event_life'] = self.df['event_created'] - self.df['event_published']
         self.df['event_life'] = self.df['event_life'].dt.days
-        # self.df['event_life'].isna
+        self.df['event_life'] = self.df['event_life'].map(lambda x: 0 if np.isnan(x) else x)
 
 
         #Columns for payout : total amount, number of payouts, set(payee names)
@@ -181,7 +181,7 @@ class pipeline_json(object):
                     'has_analytics',
                     'org_twitter',
                     'account_life',
-                    # 'event_life',
+                    'event_life',
                     'total_payout',
                     'payout_count',
                     'ticket_sales_amount',
