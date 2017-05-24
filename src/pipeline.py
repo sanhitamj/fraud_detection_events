@@ -31,6 +31,8 @@ y = pj.output_labelarray()
 from sklearn.preprocessing import normalize, scale, StandardScaler
 import pandas as pd
 import numpy as np
+from BeautifulSoup import BeautifulSoup
+
 
 class pipeline_json(object):
 
@@ -170,6 +172,11 @@ class pipeline_json(object):
         self.df['ticket_sales_count'] = ticket_type_sold
         self.df['ticket_sales_events'] = ticket_sales_event_count
 
+        #Getting word count for description column
+        for i in xrange(len(df)):
+            lst.append(len(BeautifulSoup(cleanhtml(self.df['description'][i])).text))
+        self.df['wc_description'] = pd.Series(lst)
+
     def _scale(self):
 
         features = ['org_facebook',
@@ -204,7 +211,8 @@ class pipeline_json(object):
                             'payout_count',
                             'total_payout',
                             'ticket_sales_amount',
-                            'ticket_sales_count'
+                            'ticket_sales_count',
+                            'wc_description'
                            ]
 
         self.df = self.df[features_to_keep].copy()
