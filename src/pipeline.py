@@ -14,6 +14,9 @@ ARGS    convert_to_df
     -- scaling (Default: False) Scales specific columns
     -- filtered (Default: False) Returns specific columns
 
+FOR FITTING:
+X = pj.convert_to_df(scaling=True, filtered=True)
+y = pj.output_labelarray()
 
 -Tyler
 """
