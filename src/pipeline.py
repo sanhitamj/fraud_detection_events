@@ -195,12 +195,8 @@ class pipeline_json(object):
 
 
     def _filter_features(self):
-<<<<<<< HEAD
-        features_to_keep = ['body_length',
-=======
         features_to_keep = ['fraud',
                             'short_description',
->>>>>>> 2e74fb8937baa0c5ef0df3950640d67beb87b409
                             'payout_type',
                             'fb_published',
                             'org_facebook',
