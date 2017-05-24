@@ -22,7 +22,7 @@ Short Descriptions ('body_length')
 
 Fraudulent descriptions are most likely to have descriptions below 23 characters.
 
-![Description Ratio](images/body_length.png)
+![Description Ratio](images/cutoff.png)
 
 
 # Data Pipeline
