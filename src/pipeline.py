@@ -31,6 +31,8 @@ y = pj.output_labelarray()
 from sklearn.preprocessing import normalize, scale, StandardScaler
 import pandas as pd
 import numpy as np
+from BeautifulSoup import BeautifulSoup
+
 
 class pipeline_json(object):
 
@@ -104,6 +106,9 @@ class pipeline_json(object):
         Does not remove any original features
         """
 
+        #Is currency from Europe : return 1 if Europe, 0 if not
+        self.df['eu_currency'] = self.df['currency'].map(lambda x: 1 if x in ("EUR", "GBP") else 0)
+
         #Condition Response variable fraud flag
         self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
 
@@ -111,6 +116,11 @@ class pipeline_json(object):
         # Account life of accounts
         self.df['account_life'] = self.df['event_created'] - self.df['user_created']
         self.df['account_life'] = self.df['account_life'].dt.days
+
+        # Lifetime of event
+        self.df['event_life'] = self.df['event_created'] - self.df['event_published']
+        self.df['event_life'] = self.df['event_life'].dt.days
+
 
         #Columns for payout : total amount, number of payouts, set(payee names)
         tot_payout_amt = []
@@ -158,6 +168,12 @@ class pipeline_json(object):
         self.df['ticket_sales_count'] = ticket_type_sold
         self.df['ticket_sales_events'] = ticket_sales_event_count
 
+        #Getting word count for description column
+        lst=[]
+        for i in xrange(len(self.df)):
+            lst.append(len(BeautifulSoup(self.df['description'][i]).text))
+        self.df['wc_description'] = pd.Series(lst)
+
     def _scale(self):
 
         features = ['org_facebook',
@@ -179,7 +195,12 @@ class pipeline_json(object):
 
 
     def _filter_features(self):
+<<<<<<< HEAD
         features_to_keep = ['body_length',
+=======
+        features_to_keep = ['fraud',
+                            'short_description',
+>>>>>>> 2e74fb8937baa0c5ef0df3950640d67beb87b409
                             'payout_type',
                             'fb_published',
                             'org_facebook',
@@ -187,8 +208,13 @@ class pipeline_json(object):
                             'has_header',
                             'org_twitter',
                             'account_life',
+                            'event_life',
+                            'eu_currency',
                             'payout_count',
-                            'total_payout'
+                            'total_payout',
+                            'ticket_sales_amount',
+                            'ticket_sales_count',
+                            'wc_description'
                            ]
 
         self.df = self.df[features_to_keep].copy()
