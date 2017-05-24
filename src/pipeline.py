@@ -112,10 +112,6 @@ class pipeline_json(object):
         #Condition Response variable fraud flag
         self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
 
-        # Identifies short descriptions (strong fraud correlation).
-        cutoff_length = 23
-        self.df['short_description'] = self.df['body_length'] < 23
-
 
         # Account life of accounts
         self.df['account_life'] = self.df['event_created'] - self.df['user_created']
@@ -191,7 +187,7 @@ class pipeline_json(object):
                     'ticket_sales_amount',
                     'ticket_sales_count',
                     'wc_description'
-                   ]
+                    ]
 
         for feature in features:
             ss = StandardScaler()
