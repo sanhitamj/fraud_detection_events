@@ -36,8 +36,11 @@ class pipeline_json(object):
 
         pass
 
-    def _add_features(self, df):
+    def _add_features(self):
+
+        # Add 'short_description' feature -t
+
         pass
 
-    def _filter_features(self, df):
+    def _filter_features(self):
         pass
