@@ -33,6 +33,15 @@ class pipeline_json(object):
 
         return self.df.copy()
 
+    def output_labelarray(self):
+        """
+        This function will return the response variable.
+
+        OUTPUT:
+            y - (numpy array) Boolean of Fraud (1) / Not Fraud (0)
+        """
+        return df['acct_type'].str.contains("fraud")
+
     def _convert_datetime(self):
         # Wallace edit
         # Convert date columns to datetime format
@@ -48,7 +57,23 @@ class pipeline_json(object):
         pass
 
     def _add_features(self):
-        pass
+        """
+        Adds new dummy variables
+
+        Does not remove any original features
+        """
+
+        # Identifies short descriptions, which are strongly
+        # correlated with fraudulent behavior.
+        # Cutoff length was determined by graphing -TC
+        cutoff_length = 23
+        self.df['short_description'] = self.df['body_length'] < 23
+        # This is automatically a boolean
+
 
     def _filter_features(self):
-        pass
+        features_to_keep = ['short_description',
+                            'payout'
+                           ]
+
+        self.df = self.df[features_to_keep].copy()
