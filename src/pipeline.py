@@ -8,7 +8,7 @@ EXAMPLE USE IN NOTEBOOK:
 
 from src.pipeline import pipeline_json
 pj = pipeline_json('../data/data.json')
-df = pj.convert_to_df(**args)
+df = pj.convert_to_df(scaling=False, filtered=False)
 
 ARGS    convert_to_df
     -- scaling (Default: False) Scales specific columns
@@ -98,8 +98,8 @@ class pipeline_json(object):
 
 
         # Account life of accounts
-        df['account_life'] = df['event_created'] - df['user_created']
-        df['account_life'] = df['account_life'].dt.days
+        self.df['account_life'] = self.df['event_created'] - self.df['user_created']
+        self.df['account_life'] = self.df['account_life'].dt.days
 
         #Columns for payout : total amount, number of payouts, set(payee names)
         tot_payout_amt = []
@@ -137,7 +137,8 @@ class pipeline_json(object):
 
         for feature in features:
             ss = StandardScaler()
-            self.df[feature] = ss.fit_transform(self.df[feature])
+            self.df[feature] = ss.fit_transform(self.df[feature].values.reshape((-1, 1)))
+
 
 
 
