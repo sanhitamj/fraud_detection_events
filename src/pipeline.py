@@ -42,8 +42,6 @@ class pipeline_json(object):
         """
         return df['acct_type'].str.contains("fraud")
 
-
-
     def _convert_datetime(self):
         # Wallace edit
         # Convert date columns to datetime format
@@ -66,7 +64,7 @@ class pipeline_json(object):
         # correlated with fraudulent behavior.
         # Cutoff length was determined by graphing -TC
         cutoff_length = 23
-        self.df['short_description'] = df['body_length'] < 23
+        self.df['short_description'] = self.df['body_length'] < 23
         # This is automatically a boolean
 
 
