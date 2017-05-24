@@ -14,6 +14,7 @@ df = pj.convert_to_df()
 -Tyler
 """
 
+from sklearn.preprocessing import normalize, scale, StandardScaler
 import pandas as pd
 import numpy as np
 
@@ -22,7 +23,7 @@ class pipeline_json(object):
     def __init__(self, json_dir="../data/data.json"):
         self.orig_df = pd.read_json(json_dir)
 
-    def convert_to_df(self):
+    def convert_to_df(self, scaling=False):
         #Avoid re-reading JSON file every time conversion is done by copying original dataframe.
         self.df = self.orig_df.copy()
 
@@ -32,7 +33,13 @@ class pipeline_json(object):
         self._add_features()
         # self._filter_features() IMPLEMENT THIS AT THE END
 
+        if scaling:
+            self._scale()
+
         return self.df.copy()
+
+
+
 
     def output_labelarray(self):
         """
@@ -62,7 +69,7 @@ class pipeline_json(object):
         for col in yn_cols:
             self.df[col] = self.df[col].map(yn_dict)
 
-        bin_nan_cols = ['has_header']
+        bin_nan_cols = ['has_header', 'org_facebook', 'org_twitter']
         for col in bin_nan_cols:
             self.df[col] = self.df[col].map(lambda x: x if not np.isnan(x) else -1)
             self.df[col].astype('int', copy=True)
@@ -84,10 +91,34 @@ class pipeline_json(object):
         cutoff_length = 23
         self.df['short_description'] = self.df['body_length'] < 23
 
+        # Account life of accounts
+        df['account_life'] = df['event_created'] - df['user_created']
+        df['account_life'] = df['account_life'].dt.days
+
+
+    def _scale(self):
+
+        features = ['org_facebook',
+                    'has_analytics',
+                    'org_twitter',
+                    'account_life'
+                   ]
+
+        for feature in features:
+            ss = StandardScaler()
+            self.df[feature] = ss.fit_transform(self.df[feature])
+
+
 
     def _filter_features(self):
         features_to_keep = ['short_description',
-                            'payout'
+                            'payout_type',
+                            'fb_published',
+                            'org_facebook',
+                            'has_analytics',
+                            'has_header',
+                            'org_twitter',
+                            'account_life'
                            ]
 
         self.df = self.df[features_to_keep].copy()
