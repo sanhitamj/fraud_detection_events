@@ -8,7 +8,7 @@ EXAMPLE USE IN NOTEBOOK:
 
 from src.pipeline import pipeline_json
 pj = pipeline_json('../data/data.json')
-df = pj.convert_to_df(**args)
+df = pj.convert_to_df(scaling=False, filtered=False)
 
 ARGS    convert_to_df
     -- scaling (Default: False) Scales specific columns
@@ -159,7 +159,8 @@ class pipeline_json(object):
 
         for feature in features:
             ss = StandardScaler()
-            self.df[feature] = ss.fit_transform(self.df[feature])
+            self.df[feature] = ss.fit_transform(self.df[feature].values.reshape((-1, 1)))
+
 
 
 
