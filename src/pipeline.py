@@ -42,6 +42,9 @@ class pipeline_json(object):
             self.df[col] = pd.to_datetime(self.df[col])
 
     def _convert_bools(self):
+        bin_dict = {0 : False, 1 : True}
+        yn_map = {'y': 1, 'n' : 0}
+
         pass
 
     def _add_features(self):
