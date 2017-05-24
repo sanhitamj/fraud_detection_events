@@ -42,7 +42,7 @@ The 87 days are likely due to fraud being identified late.
 ![Description Ratio](images/acctcutoff.png)
 
 It is better to leave this as a scaled linear feature.
-
+---
 # Data Pipeline
 _Used for coworking in git using merges_
 
@@ -54,3 +54,11 @@ _Used for coworking in git using merges_
 Fit and tested on a ROC curve
 
 ![roc](images/roc_curve.png)
+
+Optimal Threshold was 0.3 for our purposes.
+
+---
+
+Observed high p-values for some features
+![pvalues](images/pvalues.png)
+
