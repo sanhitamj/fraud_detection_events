@@ -31,7 +31,7 @@ y = pj.output_labelarray()
 from sklearn.preprocessing import normalize, scale, StandardScaler
 import pandas as pd
 import numpy as np
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 
 class pipeline_json(object):
@@ -124,6 +124,7 @@ class pipeline_json(object):
         # Lifetime of event
         self.df['event_life'] = self.df['event_created'] - self.df['event_published']
         self.df['event_life'] = self.df['event_life'].dt.days
+        # self.df['event_life'].isna
 
 
         #Columns for payout : total amount, number of payouts, set(payee names)
@@ -175,7 +176,7 @@ class pipeline_json(object):
         #Getting word count for description column
         lst=[]
         for i in xrange(len(self.df)):
-            lst.append(len(BeautifulSoup(self.df['description'][i]).text))
+            lst.append(len(BeautifulSoup(self.df['description'][i], 'html.parser').text))
         self.df['wc_description'] = pd.Series(lst)
 
     def _scale(self):
@@ -184,8 +185,12 @@ class pipeline_json(object):
                     'has_analytics',
                     'org_twitter',
                     'account_life',
+                    # 'event_life',
                     'total_payout',
-                    'payout_count'
+                    'payout_count',
+                    'ticket_sales_amount',
+                    'ticket_sales_count',
+                    'wc_description'
                    ]
 
         for feature in features:
