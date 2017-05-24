@@ -84,6 +84,28 @@ class pipeline_json(object):
         cutoff_length = 23
         self.df['short_description'] = self.df['body_length'] < 23
 
+        #Columns for payout : total amount, number of payouts, set(payee names)
+        tot_payout_amt = []
+        pay_cnt = []
+        payees_list = []
+        for i in xrange(self.df.shape[0]):
+            total_payout = 0
+            payout_count = len(self.df['previous_payouts'][i])
+            payees = set()
+            if payout_count > 0:
+                for d in self.df['previous_payouts'][i]:
+                    total_payout += d['amount']
+                    payees.add(d['name'])
+                tot_payout_amt.append(total_payout)
+                pay_cnt.append(payout_count)
+                payees_list.append(payees)
+            else:
+                tot_payout_amt.append(0)
+                pay_cnt.append(payout_count)
+                payees_list.append(set())
+        self.df['total_payout'] = tot_payout_amt
+        self.df['payout_count'] = pay_cnt
+        self.df['payees_set'] = payees_list
 
     def _filter_features(self):
         features_to_keep = ['short_description',
