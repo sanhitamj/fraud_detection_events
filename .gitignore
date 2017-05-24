@@ -1,5 +1,4 @@
 data/data.json
 *.json
-data/dataframe_pipelined.pkl
 temp/.ipynb_checkpoints/*
 *.pyc

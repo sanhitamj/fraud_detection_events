@@ -29,7 +29,7 @@ class pipeline_json(object):
         self._convert_datetime()
         self._convert_bools()
         self._add_features()
-        self._filter_features()
+        # self._filter_features() IMPLEMENT THIS AT THE END
 
         return self.df.copy()
 
