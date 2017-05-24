@@ -2,3 +2,4 @@ data/data.json
 *.json
 temp/.ipynb_checkpoints/*
 *.pyc
+src/*.pyc
