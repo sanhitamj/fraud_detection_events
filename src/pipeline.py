@@ -200,7 +200,7 @@ class pipeline_json(object):
                             'org_twitter',
                             'account_life',
                             'event_life',
-                            'eu_currency'
+                            'eu_currency',
                             'payout_count',
                             'total_payout',
                             'ticket_sales_amount',
