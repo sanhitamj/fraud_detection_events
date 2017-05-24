@@ -45,13 +45,22 @@ class pipeline_json(object):
         pass
 
     def _add_features(self):
-<<<<<<< HEAD
+        """
+        Adds new dummy variables
 
-        # Add 'short_description' feature -t
+        Does not remove any original features
+        """
 
-=======
->>>>>>> 52bbcbb157940890a9df2af6ccaa84e63e5c02de
-        pass
+        # Identifies short descriptions, which are strongly
+        # correlated with fraudulent behavior.
+        # Cutoff length was determined by graphing -TC
+        cutoff_length = 23
+        self.df['short_description'] = df['body_length'] < 23
+
 
     def _filter_features(self):
-        pass
+        features_to_keep = ['body_length',
+                            'payout'
+                           ]
+
+        self.df = self.df[features_to_keep].copy()
