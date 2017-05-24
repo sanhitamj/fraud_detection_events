@@ -173,8 +173,9 @@ class pipeline_json(object):
         self.df['ticket_sales_events'] = ticket_sales_event_count
 
         #Getting word count for description column
+        lst=[]
         for i in xrange(len(self.df)):
-            lst.append(len(BeautifulSoup(cleanhtml(self.df['description'][i])).text))
+            lst.append(len(BeautifulSoup(self.df['description'][i]).text))
         self.df['wc_description'] = pd.Series(lst)
 
     def _scale(self):
