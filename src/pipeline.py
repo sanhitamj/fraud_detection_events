@@ -98,8 +98,8 @@ class pipeline_json(object):
 
 
         # Account life of accounts
-        df['account_life'] = df['event_created'] - df['user_created']
-        df['account_life'] = df['account_life'].dt.days
+        self.df['account_life'] = self.df['event_created'] - self.df['user_created']
+        self.df['account_life'] = self.df['account_life'].dt.days
 
         #Columns for payout : total amount, number of payouts, set(payee names)
         tot_payout_amt = []
@@ -124,6 +124,28 @@ class pipeline_json(object):
         self.df['payout_count'] = pay_cnt
         self.df['payees_set'] = payees_list
 
+        #Add columns for ticket type features
+        col = 'ticket_types'
+        ticket_type_sales = []
+        ticket_type_count = []
+        ticket_type_sold = []
+        for i in xrange(self.df.shape[0]):
+            ticket_sales_amt = 0
+            tickets_sold = 0
+            ticket_sales_event_count = len(self.df[col][i])
+            if ticket_sales_event_count > 0:
+                for d in self.df[col][i]:
+                    ticket_sales_amt += d['quantity_sold'] * d['cost']
+                    tickets_sold += d['quantity_sold']
+                ticket_type_sales.append(ticket_sales_amt)
+                ticket_type_sold.append(tickets_sold)
+            else:
+                ticket_type_sales.append(0)
+                ticket_type_sold.append(0)
+            ticket_type_count.append(ticket_sales_event_count)
+        self.df['ticket_sales_amount'] = ticket_type_sales
+        self.df['ticket_sales_count'] = ticket_type_sold
+        self.df['ticket_sales_events'] = ticket_sales_event_count
 
     def _scale(self):
 
