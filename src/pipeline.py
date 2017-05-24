@@ -200,7 +200,7 @@ class pipeline_json(object):
 
 
     def _filter_features(self):
-        features_to_keep = ['fraud',
+        features_to_keep = [
                             'payout_type',
                             'fb_published',
                             'org_facebook',
