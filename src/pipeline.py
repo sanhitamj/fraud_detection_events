@@ -107,10 +107,6 @@ class pipeline_json(object):
         #Condition Response variable fraud flag
         self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
 
-        # Identifies short descriptions (strong fraud correlation).
-        cutoff_length = 23
-        self.df['short_description'] = self.df['body_length'] < 23
-
 
         # Account life of accounts
         self.df['account_life'] = self.df['event_created'] - self.df['user_created']
@@ -169,7 +165,8 @@ class pipeline_json(object):
                     'org_twitter',
                     'account_life',
                     'total_payout',
-                    'payout_count'
+                    'payout_count',
+                    'body_length'
                    ]
 
         for feature in features:
@@ -182,7 +179,7 @@ class pipeline_json(object):
 
 
     def _filter_features(self):
-        features_to_keep = ['short_description',
+        features_to_keep = ['body_length',
                             'payout_type',
                             'fb_published',
                             'org_facebook',
