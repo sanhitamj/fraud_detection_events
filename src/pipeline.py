@@ -40,7 +40,7 @@ class pipeline_json(object):
         OUTPUT:
             y - (numpy array) Boolean of Fraud (1) / Not Fraud (0)
         """
-        return df['acct_type'].str.contains("fraud")
+        return self.df['fraud']
 
     def _convert_datetime(self):
         # Wallace edit
@@ -63,12 +63,12 @@ class pipeline_json(object):
         Does not remove any original features
         """
 
-        # Identifies short descriptions, which are strongly
-        # correlated with fraudulent behavior.
-        # Cutoff length was determined by graphing -TC
+        #Condition Response variable fraud flag
+        self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
+
+        # Identifies short descriptions (strong fraud correlation).
         cutoff_length = 23
         self.df['short_description'] = self.df['body_length'] < 23
-        # This is automatically a boolean
 
 
     def _filter_features(self):
