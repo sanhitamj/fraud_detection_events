@@ -45,3 +45,12 @@ It is better to leave this as a scaled linear feature.
 
 # Data Pipeline
 _Used for coworking in git using merges_
+
+
+--- 
+
+# Logistic Regression
+
+Fit and tested on a ROC curve
+
+![roc](images/roc_curve.png)
