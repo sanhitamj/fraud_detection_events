@@ -89,6 +89,9 @@ class pipeline_json(object):
         Does not remove any original features
         """
 
+        #Is currency from Europe : return 1 if Europe, 0 if not
+        self.df['eu_currency'] = self.df['currency'].map(lambda x: 1 if x in ("EUR", "GBP") else 0)
+
         #Condition Response variable fraud flag
         self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
 
@@ -100,6 +103,11 @@ class pipeline_json(object):
         # Account life of accounts
         self.df['account_life'] = self.df['event_created'] - self.df['user_created']
         self.df['account_life'] = self.df['account_life'].dt.days
+
+        # Lifetime of event
+        self.df['event_life'] = self.df['event_created'] - self.df['event_published']
+        self.df['event_life'] = self.df['event_life'].dt.days
+
 
         #Columns for payout : total amount, number of payouts, set(payee names)
         tot_payout_amt = []
@@ -167,7 +175,8 @@ class pipeline_json(object):
 
 
     def _filter_features(self):
-        features_to_keep = ['short_description',
+        features_to_keep = ['fraud',
+                            'short_description',
                             'payout_type',
                             'fb_published',
                             'org_facebook',
@@ -175,8 +184,13 @@ class pipeline_json(object):
                             'has_header',
                             'org_twitter',
                             'account_life',
+                            'event_life',
+                            'eu_currency'
                             'payout_count',
-                            'total_payout'
+                            'total_payout',
+                            'ticket_sales_amount',
+                            'ticket_sales_count',
+                            
                            ]
 
         self.df = self.df[features_to_keep].copy()
