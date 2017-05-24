@@ -58,7 +58,9 @@ Fit and tested on a ROC curve
 
 ![roc](images/roc_curve.png)
 
-Optimal Threshold was 0.3 for our purposes.
+Optimal Threshold was 0.3 for our purposes.  
+
+We lost accuracy by selecting a good threshold - but the intent was to capture more true positives.
 
 ---
 
