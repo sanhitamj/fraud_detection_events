@@ -49,7 +49,7 @@ class pipeline_json(object):
         date_cols = ['approx_payout_date', 'event_created', 'event_created', 'event_end', \
                      'event_published', 'event_start', 'user_created']
         for col in date_cols:
-            self.df[col] = pd.to_datetime(self.df[col])
+            self.df[col] = pd.to_datetime(self.df[col], unit='s')
 
     def _convert_bools(self):
         bin_dict = {0 : False, 1 : True}
