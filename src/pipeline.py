@@ -15,6 +15,7 @@ df = pj.convert_to_df()
 """
 
 import pandas as pd
+import numpy as np
 
 class pipeline_json(object):
 
@@ -67,7 +68,7 @@ class pipeline_json(object):
             self.df[col].astype('int', copy=True)
 
         payout_dict = {'CHECK': 1, 'ACH' : 1, '':0}
-        self.df['payout_type'] = df['payout_type'].map(payout_dict)
+        self.df['payout_type'] = self.df['payout_type'].map(payout_dict)
 
     def _add_features(self):
         """
