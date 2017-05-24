@@ -31,7 +31,7 @@ y = pj.output_labelarray()
 from sklearn.preprocessing import normalize, scale, StandardScaler
 import pandas as pd
 import numpy as np
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 
 class pipeline_json(object):
@@ -182,7 +182,6 @@ class pipeline_json(object):
                     'account_life',
                     'total_payout',
                     'payout_count',
-                    'body_length'
                    ]
 
         for feature in features:
@@ -196,7 +195,6 @@ class pipeline_json(object):
 
     def _filter_features(self):
         features_to_keep = ['fraud',
-                            'short_description',
                             'payout_type',
                             'fb_published',
                             'org_facebook',
