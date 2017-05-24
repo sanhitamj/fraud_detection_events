@@ -10,6 +10,9 @@ from src.pipeline import pipeline_json
 pj = pipeline_json('../data/data.json')
 df = pj.convert_to_df()
 
+OR
+
+df = pj.convert_to_df(filtered=True)
 
 -Tyler
 """
@@ -23,7 +26,7 @@ class pipeline_json(object):
     def __init__(self, json_dir="../data/data.json"):
         self.orig_df = pd.read_json(json_dir)
 
-    def convert_to_df(self, scaling=False):
+    def convert_to_df(self, scaling=False, filtered=False):
         #Avoid re-reading JSON file every time conversion is done by copying original dataframe.
         self.df = self.orig_df.copy()
 
@@ -31,13 +34,14 @@ class pipeline_json(object):
         self._convert_datetime()
         self._convert_bools()
         self._add_features()
-        # self._filter_features() IMPLEMENT THIS AT THE END
+
+        if filtered:
+            self._filter_features() IMPLEMENT THIS AT THE END
 
         if scaling:
             self._scale()
 
         return self.df.copy()
-
 
 
 
@@ -125,7 +129,9 @@ class pipeline_json(object):
         features = ['org_facebook',
                     'has_analytics',
                     'org_twitter',
-                    'account_life'
+                    'account_life',
+                    'total_payout',
+                    'payout_count'
                    ]
 
         for feature in features:
@@ -144,7 +150,9 @@ class pipeline_json(object):
                             'has_analytics',
                             'has_header',
                             'org_twitter',
-                            'account_life'
+                            'account_life',
+                            'payout_count',
+                            'total_payout'
                            ]
 
         self.df = self.df[features_to_keep].copy()
