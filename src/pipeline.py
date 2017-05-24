@@ -96,21 +96,6 @@ class pipeline_json(object):
         df['account_life'] = df['event_created'] - df['user_created']
         df['account_life'] = df['account_life'].dt.days
 
-
-    def _scale(self):
-
-        features = ['org_facebook',
-                    'has_analytics',
-                    'org_twitter',
-                    'account_life'
-                   ]
-
-        for feature in features:
-            ss = StandardScaler()
-            self.df[feature] = ss.fit_transform(self.df[feature])
-
-
-
         #Columns for payout : total amount, number of payouts, set(payee names)
         tot_payout_amt = []
         pay_cnt = []
@@ -133,6 +118,22 @@ class pipeline_json(object):
         self.df['total_payout'] = tot_payout_amt
         self.df['payout_count'] = pay_cnt
         self.df['payees_set'] = payees_list
+
+
+    def _scale(self):
+
+        features = ['org_facebook',
+                    'has_analytics',
+                    'org_twitter',
+                    'account_life'
+                   ]
+
+        for feature in features:
+            ss = StandardScaler()
+            self.df[feature] = ss.fit_transform(self.df[feature])
+
+
+
 
 
     def _filter_features(self):
