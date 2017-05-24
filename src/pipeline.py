@@ -8,11 +8,12 @@ EXAMPLE USE IN NOTEBOOK:
 
 from src.pipeline import pipeline_json
 pj = pipeline_json('../data/data.json')
-df = pj.convert_to_df()
+df = pj.convert_to_df(**args)
 
-OR
+ARGS    convert_to_df
+    -- scaling (Default: False) Scales specific columns
+    -- filtered (Default: False) Returns specific columns
 
-df = pj.convert_to_df(filtered=True)
 
 -Tyler
 """
@@ -36,7 +37,7 @@ class pipeline_json(object):
         self._add_features()
 
         if filtered:
-            self._filter_features() IMPLEMENT THIS AT THE END
+            self._filter_features()
 
         if scaling:
             self._scale()
