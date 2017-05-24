@@ -3,9 +3,15 @@ Creates a pipelined dataframe to
 local notebook
 
 ------------
+TO RUN FROM SUBFOLDERS:
+import os
+import sys
+module_path = os.path.abspath(os.path.join('..'))
+if module_path not in sys.path:
+    sys.path.append(module_path)
 
+---------
 EXAMPLE USE IN NOTEBOOK:
-
 from src.pipeline import pipeline_json
 pj = pipeline_json('../data/data.json')
 df = pj.convert_to_df(scaling=False, filtered=False)
@@ -14,6 +20,7 @@ ARGS    convert_to_df
     -- scaling (Default: False) Scales specific columns
     -- filtered (Default: False) Returns specific columns
 
+-------
 FOR FITTING:
 X = pj.convert_to_df(scaling=True, filtered=True)
 y = pj.output_labelarray()
