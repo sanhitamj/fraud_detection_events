@@ -204,8 +204,7 @@ class pipeline_json(object):
                             'payout_count',
                             'total_payout',
                             'ticket_sales_amount',
-                            'ticket_sales_count',
-                            
+                            'ticket_sales_count'
                            ]
 
         self.df = self.df[features_to_keep].copy()
