@@ -5,7 +5,7 @@ psql
 CREATE DATABASE fraud;
 \c fraud
 CREATE TABLE events (Index SERIAL PRIMARY KEY, probability real, predict smallint,
-  org_name text, name text, tot_payout real, risk_score real, json text);
+  org_name text, name text, tot_payout real, risk_score real, json_str text);
 
 
 

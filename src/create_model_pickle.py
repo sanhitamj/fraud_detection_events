@@ -29,6 +29,8 @@ class tyler_logit_model():
     def __init__(self):
         self.scaler_loc = "../models/logit_scaler.pkl"
         self.lrmodel = "../models/logit_model.pkl"
+        self.X_temp = None
+        self.y_temp = None
 
     def fit(self, data):
         """Fits an external json or path"""
@@ -74,7 +76,9 @@ class tyler_logit_model():
 
         if response:
             y = pj.output_labelarray()
+            self.y_temp = y
             return X, y
+        self.X_temp = X
         return X
 
 
