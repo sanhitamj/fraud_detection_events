@@ -32,11 +32,6 @@ df['account_life'] = df['event_created'] - df['user_created']
 df['account_life'] = df['account_life'].dt.days
 ```
 
-|"" | Account life|
-|---|---|
-Fraud| 87|
-Non-Fraud| 402|
-
 | Feature | Fraud | Not Fraud |
 | --------| ----- | --------- |
 | Account life| 82 | 402 (days)|
@@ -82,3 +77,22 @@ We lost accuracy by selecting a good threshold - but the intent was to capture m
 Observed high p-values for some features
 ![pvalues](images/pvalues.png)
 
+
+# Gradient Boost
+
+# Random Forests
+
+Train-Test: 0.75-0.25
+Model parameters used -
+
+```python
+from sklearn.ensemble import RandomForestClassifier as RF
+rf = RF(n_estimators=50, min_samples_split=20, min_samples_leaf=1,   min_impurity_split=1e-5, max_depth = 30, oob_score=True)
+rf.score(X_test, y_test)
+= 0.986
+print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
+```
+| | |
+|--|--|
+|TN: 3242 | FP: 19 |
+|FN: 30   | TP: 288|
