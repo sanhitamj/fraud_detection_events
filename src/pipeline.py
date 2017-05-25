@@ -36,16 +36,7 @@ from bs4 import BeautifulSoup
 
 
 class pipeline_json(object):
-#
-# <<<<<<< HEAD
-#     def __init__(self, json_dir="../data/data.json"):
-#         try:
-#             self.orig_df = pd.read_json(json_dir)
-#         except ValueError:
-#             a_df = pd.read_json(json_dir, typ='Series').to_frame()
-#             self.orig_df = pd.DataFrame(a_df)
-#
-# =======
+
     def __init__(self, json_dir="../data/data.json", scaler=None):
         try:
             self.orig_df = pd.read_json(json_dir)
@@ -54,6 +45,7 @@ class pipeline_json(object):
             query_df = pd.DataFrame.from_dict(json_dir,  orient='index')
             query_df = query_df.transpose()
             self.orig_df = query_df
+            self.scaler = scaler
 
     def convert_to_df(self, scaling=False, filtered=False):
         #Avoid re-reading JSON file every time conversion is done by copying original dataframe.
@@ -105,8 +97,13 @@ class pipeline_json(object):
 
         bin_nan_cols = ['has_header', 'org_facebook', 'org_twitter']
         for col in bin_nan_cols:
-            self.df[col] = self.df[col].map(lambda x: x if not np.isnan(x) else -1)
-            self.df[col].astype('int', copy=True)
+            if len(self.df[col]) == 1:
+                self.df[col] = self.df[col].map(lambda x: x if not x == None else -1)
+                self.df[col].astype('int', copy=True)
+            else:
+                self.df[col] = self.df[col].map(lambda x: x if not np.isnan(x) else -1)
+                self.df[col].astype('int', copy=True)
+
 
         payout_dict = {'CHECK': 1, 'ACH' : 1, '':0}
         self.df['payout_type'] = self.df['payout_type'].map(payout_dict)
@@ -133,7 +130,11 @@ class pipeline_json(object):
         # Lifetime of event
         self.df['event_life'] = self.df['event_created'] - self.df['event_published']
         self.df['event_life'] = self.df['event_life'].dt.days
-        self.df['event_life'] = self.df['event_life'].map(lambda x: 0 if np.isnan(x) else x)
+
+        if len(self.df['event_life']) == 1:
+            self.df['event_life'] = self.df['event_life'].map(lambda x: 0 if x == None else x)
+        else:
+            self.df['event_life'] = self.df['event_life'].map(lambda x: 0 if np.isnan(x) else x)
 
 
         #Columns for payout : total amount, number of payouts, set(payee names)
@@ -210,7 +211,6 @@ class pipeline_json(object):
             scaled_columns = self.scaler.fit_transform(self.df[features])
 
         for idx, column in enumerate(features):
-            print column, idx
             self.df[column] = scaled_columns[:, idx]
 
     def _filter_features(self):

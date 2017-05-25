@@ -4,11 +4,12 @@
 psql
 CREATE DATABASE fraud;
 \c fraud
-CREATE TABLE events (Index SERIAL PRIMARY KEY, predict real, json text);
+CREATE TABLE events (Index SERIAL PRIMARY KEY, probability real, predict smallint,
+  org_name text, name text, tot_payout real, risk_score real, json text);
 
 
 
-
+-- example
 -- Python commands to manipulate postgresql database:
 import psycopg2
 
