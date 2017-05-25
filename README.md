@@ -34,6 +34,7 @@ df['account_life'] = df['account_life'].dt.days
 
 ![Ratio for fraud to not-fraud](images/feature_imp.png)
 
+![Ratio for fraud to not-fraud](images/feature_imp_single_bar.png)
 
 Relative ratios of features for fraud and not-fraud
 
