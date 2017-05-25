@@ -7,12 +7,12 @@ import psycopg2
 user = 'wallace'
 db = 'fraud'
 
-def insert_vals(prob, predict, json_str, user=user):
+
+def insert_vals(prob=0, predict=0, org_name=' ', name=' ', tot_payout=0, risk_score=0, json_str=' ', user=user):
     #Write prediction and JSON string to database
     conn = psycopg2.connect(dbname = db, port=5432, password='', user=user, host='localhost')
     cur = conn.cursor()
-    for pr, p, j in zip(prob, predict, [json_str]):
-        cur.execute("INSERT INTO events (probability, predict, json) VALUES (%s, %s, %s)",(pr, p, j))
+    cur.execute("INSERT INTO events (prob, predict, org_name, name, tot_payout, risk_score, json_str) VALUES (%s, %s, %s, %s, %s, %s, %s)",(prob, predict, org_name, name, tot_payout, risk_score, json_str))
     conn.commit()
     cur.close()
     conn.close()
@@ -22,7 +22,7 @@ def read_vals(user=user):
     #Read all values in table and return row-wise entries
     conn = psycopg2.connect(dbname = db, port=5432, password='', user=user, host='localhost')
     cur = conn.cursor()
-    query = '''SELECT * FROM events;'''
+    query = '''SELECT prob, predict, org_name, name, tot_payout, risk_score FROM events ORDER BY risk_score desc;'''
     cur.execute(query)
     rows = cur.fetchall()
     cur.close()
