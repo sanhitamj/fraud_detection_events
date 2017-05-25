@@ -1,7 +1,11 @@
 # Fraud Detection Case Study
 # Galvanize Data Science Immersive
 
--- Tyler Carstensen, Wallace Printz, Sanhita Joshi
+Authors:
+* Tyler Carstensen
+* Wallace Printz
+* Sanhita Joshi
+
 Fraud Detection Model for &lt;event-company>. Dataset is not shared on git due to confidentiality.
 
 ---
@@ -132,10 +136,25 @@ print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
 
 ---
 
-# Data management Pipelines
+# Data Processing Flow
 
-[Show data management flow]
+![Data Flowchart](images/flow_chart_fraud_detection.png)
 
+
+The logical flow is controlled through a Flask app, where data is pulled from a web-hosted API and a prediction made through the fitted model.  The prediction score and associated information is stored in the PostgreSQL database.  The Flask app then calls a Jinja2 template to query the SQL database to return the predictions sorted by fraud likelihood, then updates the HTML dashboard.
+
+Multiple technologies were used to implement a solution:
+* sci-kit-learn
+* statsmodels
+* matplotlib
+* requests
+* pandas
+* numpy
+* Flask
+* Jinja2
+* PostgreSQL
+* psycopg2
+* Jupyter notebook
 
 ---
 
@@ -145,3 +164,5 @@ A Flask web app was implemented to draw fraudulent events from the PostgreSQL da
 * risk_score = probability_of_fraud * total_payout
 
 This allows company fraud investigators to quickly focus on the events most likely to have the largest financial impact to the company.
+
+![Dashboard](images/flow_chart_fraud_detection.png)
