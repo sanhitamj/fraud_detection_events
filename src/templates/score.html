@@ -27,8 +27,8 @@ table.imagetable td {
 }
 </style>
 
-  <meta charset='utf-32'>
-  <title>Flask - User Input via HTTP POST</title>
+  <meta charset='utf-8'>
+  <title>Flask App - SQL Model Contents</title>
 </head>
 <body>
 
@@ -40,8 +40,12 @@ table.imagetable td {
 
   {% if name %}
 
-  <h1>Your JSON's have been received!</h1>
+  <h1>Fraud Prediction</h1>
   <h2>Potential Fraudulent Transactions</h2>
+  <p>
+      <ul> Prediction = 0. No Fraud Detected</ul>
+      <ul> Prediction = 1. Issue Warrant for Arrest of User</ul>
+  </p>
     <table class="imagetable">
         <thead>
             {% for header in headers %}
