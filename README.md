@@ -18,19 +18,6 @@ df['fraud'] = df['acct_type'].str.contains("fraud")
 ### Feature Selection
 
 ---
-Short Descriptions ('body_length')
-
-Fraudulent descriptions are most likely to have descriptions below 23 characters.
-
-![Description Ratio](images/cutoff.png)
-
----
-Account life
-
-```python
-df['account_life'] = df['event_created'] - df['user_created']
-df['account_life'] = df['account_life'].dt.days
-```
 
 ![Ratio for fraud to not-fraud](images/feature_imp.png)
 
@@ -51,6 +38,23 @@ Relative ratios of features for fraud and not-fraud
 |listed(%)|0.49|0.51|
 |show_map (%) |0.46 | 0.54|
 |has_logo (%)| 0.43| 0.57 |
+
+
+Short Descriptions ('body_length')
+
+Fraudulent descriptions are most likely to have descriptions below 23 characters.
+
+![Description Ratio](images/cutoff.png)
+
+---
+Account life
+
+```python
+df['account_life'] = df['event_created'] - df['user_created']
+df['account_life'] = df['account_life'].dt.days
+```
+
+
 
 
 The 87 days are likely due to fraud being identified late.
