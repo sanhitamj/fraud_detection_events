@@ -1,5 +1,4 @@
 # Fraud Detection Case Study
-# Galvanize Data Science Immersive
 
 Authors:
 * Tyler Carstensen
@@ -102,7 +101,7 @@ Logistic Regression from stat.models and sci-kit-learn was used to fit a model. 
 
 Optimal Threshold was 0.3 for our purposes.  
 
-We lost accuracy by selecting a good threshold - but the intent was to capture more true positives.
+A choice was made to allow more false positives and reduce false negatives as falsely predicting fraud reduces trust of the user base while false negatives have a direct monetary loss to profitability.
 
 ---
 
@@ -160,9 +159,9 @@ Multiple technologies were used to implement a solution:
 
 # Presentation Dashboard
 
-A Flask web app was implemented to draw fraudulent events from the PostgreSQL database.  The fraudulent events are scored and sorted by risk-adjusted-value, where :
+A Flask web app was implemented to draw fraudulent events from the PostgreSQL database.  The fraudulent events are scored and sorted by highest risk probability, then by risk-adjusted-value, where :
 * risk_score = probability_of_fraud * total_payout
 
 This allows company fraud investigators to quickly focus on the events most likely to have the largest financial impact to the company.
 
-![Dashboard](images/flow_chart_fraud_detection.png)
+![Dashboard](images/dashboard.png)
