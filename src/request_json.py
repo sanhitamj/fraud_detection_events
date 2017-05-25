@@ -7,4 +7,4 @@ import requests
 
 def get_json():
   response = requests.get('http://galvanize-case-study-on-fraud.herokuapp.com/data_point')
-  return response.content
+  return response.json()
