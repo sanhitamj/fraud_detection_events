@@ -31,7 +31,7 @@ To determine the principle features to include in our model training set, we det
 __Relative ratios of features for fraud and not-fraud (examples)__
 
 | Feature | Fraud | Not Fraud | Feature Separation | Description |
-| --------| ----- | --------- | ----------- |
+| --------| ----- | --------- | ----------- | --------- | 
 | Account life| 0.18 | 0.82| 4.63 |Number of days from user creation to event date |
 | fb_published| 0.13| 0.86| 6.15 | Was event published on FaceBook ? |
 |org_facebook |0.1|0.99| 9.09 | Number of users in Facebook Group |
