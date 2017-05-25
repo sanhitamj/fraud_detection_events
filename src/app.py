@@ -1,4 +1,9 @@
-from flask import Flask, url_for, render_template
+from flask import Flask, url_for, render_template, request
+from create_model_pickle import tyler_logit_model
+from store_sql import insert_vals, read_vals
+import numpy as np
+import json
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -7,15 +12,33 @@ def api_root():
 
 #define website
 @app.route('/hello', methods=['GET'])   #map web page to address with decorator
-def index():
+def hello():
     return 'Hello, World!'
 
 #define website
-@app.route('/score', methods=['POST'])   #map web page to address with decorator
-def index():
-    name = request.form.get('name')     #Use request.form instead of request.args if using POST to enter info
-    return render_template('index.html', name=name)
+@app.route('/score', methods=['GET', 'POST'])   #map web page to address with decorator
+def score():
+    json_input = request.get_json()
+    tlm = tyler_logit_model()
+    prob, prediction = tlm.predict(json_input)
+    print "-" * 50
+    print "RAW"
+    print '{}'.format(json_input)
+    print "-" * 50
+    print "type"
+    print type('{}'.format(json_input))
+    print "-" * 50
+    print "dir"
+    print dir('{}'.format(json_input))
+    insert_vals(prob.astype(np.float64), prediction.astype(int), '{}'.format(json_input), user='tyler')
 
+    return render_template('score.html', name=prediction)
+
+#DEBUG - WHAT WAS LAST POST??
+@app.route('/scoredebug', methods=['GET', 'POST'])   #map web page to address with decorator
+def scoredebug():
+    sqlbase = read_vals(user='tyler')
+    return render_template('score.html', name=sqlbase)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

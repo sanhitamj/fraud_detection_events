@@ -14,7 +14,7 @@ RUN THIS FILE FROM SRC
     tlm = tyler_logit_model()
     tlm.predict(json_data, threshold=0.3)
 """
-
+from request_json import get_json
 import random
 import cPickle as pickle
 from sklearn.linear_model import LogisticRegression
@@ -38,22 +38,35 @@ class tyler_logit_model():
         lr.fit(np.array(X), np.array(y))
 
         with open(self.lrmodel, 'w') as f:
-            pickle.dump(self.lrmodel, f)
+            pickle.dump(lr, f)
 
 
     def predict(self, data, threshold=0.5):
         with open(self.scaler_loc, 'r') as f:
             scaler = pickle.load(f)
 
-        X = self._pipe_data(data, response=False, scaler=scaler)
+        X = self._pipe_data(data, response=False, scaler_exists=True)
 
         with open(self.lrmodel, 'r') as f:
             lr = pickle.load(f)
+        print lr
 
-        return lr.predict_proba(X)[:, 1] > threshold
+        prob = lr.predict_proba(X)[:, 1]
 
-    def _pipe_data(self, data, response=False):
-        pj = pipeline_json(data)
+        return prob, (prob > threshold)
+
+
+
+
+    def _pipe_data(self, data, response=False, scaler_exists=False):
+
+        if scaler_exists:
+            with open(self.scaler_loc, 'r') as f:
+                scaler = pickle.load(f)
+            pj = pipeline_json(data, scaler=scaler)
+        else:
+            pj = pipeline_json(data)
+
         X = pj.convert_to_df(scaling=True, filtered=True)
 
         with open(self.scaler_loc, 'w') as f:
@@ -84,4 +97,5 @@ if __name__ == '__main__':
     ### API LINES FOR PREDICTION
     #Logit Model
     tlm = tyler_logit_model()
-    tlm.predict(json_data, threshold=0.3)
+    json_str = get_json()
+    tlm.predict(json_str, threshold=0.3)
