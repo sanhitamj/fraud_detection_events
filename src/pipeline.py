@@ -38,7 +38,11 @@ from bs4 import BeautifulSoup
 class pipeline_json(object):
 
     def __init__(self, json_dir="../data/data.json"):
-        self.orig_df = pd.read_json(json_dir)
+        try:
+            self.orig_df = pd.read_json(json_dir)
+        except ValueError:
+            a_df = pd.read_json(json_dir, typ='Series').to_frame()
+            self.orig_df = pd.DataFrame(a_df)
 
 
     def convert_to_df(self, scaling=False, filtered=False):
@@ -68,6 +72,7 @@ class pipeline_json(object):
             y - (numpy array) Boolean of Fraud (1) / Not Fraud (0)
         """
         return self.convert_to_df()['fraud']
+
 
     def _convert_datetime(self):
         # Wallace edit
