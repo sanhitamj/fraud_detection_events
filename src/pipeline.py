@@ -27,6 +27,7 @@ y = pj.output_labelarray()
 
 -Tyler
 """
+import os
 
 from sklearn.preprocessing import normalize, scale, StandardScaler
 import pandas as pd
@@ -38,9 +39,6 @@ class pipeline_json(object):
 
     def __init__(self, json_dir="../data/data.json"):
         self.orig_df = pd.read_json(json_dir)
-
-
-
 
 
     def convert_to_df(self, scaling=False, filtered=False):
@@ -62,7 +60,6 @@ class pipeline_json(object):
         return self.df.copy()
 
 
-
     def output_labelarray(self):
         """
         This function will return the response variable.
@@ -81,7 +78,7 @@ class pipeline_json(object):
             self.df[col] = pd.to_datetime(self.df[col], unit='s')
 
     def _convert_bools(self):
-        bin_dict = {0 : 0, 1 : 1}
+        bin_dict = {0 : False, 1 : True}
         bin_cols = ['show_map', 'fb_published', 'has_logo', 'has_analytics']
         for col in bin_cols:
             self.df[col] = self.df[col].map(bin_dict)
@@ -111,7 +108,7 @@ class pipeline_json(object):
 
         #Condition Response variable fraud flag
         self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
-        self.df['fraud'] = self.df['fraud'].map({True:1, False:0})
+
 
         # Account life of accounts
         self.df['account_life'] = self.df['event_created'] - self.df['user_created']
@@ -120,8 +117,7 @@ class pipeline_json(object):
         # Lifetime of event
         self.df['event_life'] = self.df['event_created'] - self.df['event_published']
         self.df['event_life'] = self.df['event_life'].dt.days
-        event_mean = self.df['event_life'].mean()
-        self.df['event_life'] = self.df['event_life'].map(lambda x: event_mean if np.isnan(x) else x)
+        self.df['event_life'] = self.df['event_life'].map(lambda x: 0 if np.isnan(x) else x)
 
 
         #Columns for payout : total amount, number of payouts, set(payee names)

@@ -1,50 +1,55 @@
+"""
+RUN THIS FILE FROM SRC
+"""
+
 import random
 import cPickle as pickle
 from sklearn.linear_model import LogisticRegression
-from src.pipeline import pipeline_json
+from pipeline import pipeline_json
+import os
+import numpy as np
 
 
 class tyler_logit_model():
     """Pipelines test data and fits to an object"""
     def __init__(self):
-        pass
+        self.model = None
 
-    def fit(X, y):
+    def fit(self, data):
         """Fits an external json or path"""
 
-        X, y = self._pipe_data(X, y)
-        lr = LogisticRegression(X, y)
-        lr.fit(X, y)
+        X, y = self._pipe_data(data, response=True)
+        lr = LogisticRegression()
+        lr.fit(np.array(X), np.array(y))
 
         self.model = lr
 
 
-    def predict(X, threshold=0.5):
-        return self.model.predict_proba(X_test)[:, 1] > threshold
+    def predict(self, data, threshold=0.5):
+        X = self._pipe_data(data, response=False)
+        return self.model.predict_proba(X)[:, 1] > threshold
 
-    def _pipe_date(X, y=None):
-        pj = pipeline_json('../data/data.json')
-        df = pj.convert_to_df(scaling=True, filtered=True)
-
+    def _pipe_data(self, data, response=False):
+        pj = pipeline_json(data)
         X = pj.convert_to_df(scaling=True, filtered=True)
-
-        if y:
+        if response:
             y = pj.output_labelarray()
+            return X, y
+        return X
 
-        return X, y
-
-def get_data(datafile):
-    pass
-    return X, y
 
 if __name__ == '__main__':
-    X, y = get_data('data/data.json')
+    relative_dir = "../data/data.json"
+    direc = os.path.dirname(__file__)
+    filename = os.path.join(direc, relative_dir)
+
 
     # Dump all listed models to the model folder
     models = [tyler_logit_model]
-    for model in models:
+    model_names = ["tyler_logit"]
+    for model, name in zip(models, model_names):
         currentmod = model()
-        model.fit(X, y)
-        model_name = "models/" + type(model).__name__ + ".pkl"
+        currentmod.fit(relative_dir)
+        model_name = "../models/" + name + ".pkl"
         with open(model_name, 'w') as f:
             pickle.dump(model, f)
