@@ -14,20 +14,25 @@
 
   {% if name %}
 
-  <h1>Your JSON's have been recieved!</h1>
+  <h1>Your JSON's have been received!</h1>
   <h2>Potential Fraudulent Transactions</h2>
     <table>
-    <tbody>
-    {% for name in name %}
-    <TR>
-       <TD class="c1">{{name.name_length}}</TD>
-       <TD class="c2">{{name.name}}</TD>
-       <TD class="c3">{{name.description}}</TD>
-       <TD class="c4"><SPAN>{{name.org_name}}</SPAN></TD>
-       <TD class="c5"><SPAN>{{name.total_payout}}</SPAN></TD>
-    </TR>
-    {% endfor %}
-    </tbody>
+        <thead>
+            {% for header in headers %}
+            <th>{{header}}</th>
+            {% endfor %}
+        </thead>
+        <tbody>
+            {% for name in name %}
+            <TR>
+               <TD class="c1">{{name.name_length}}</TD>
+               <TD class="c2">{{name.name}}</TD>
+               <TD class="c3">{{name.description}}</TD>
+               <TD class="c4"><SPAN>{{name.org_name}}</SPAN></TD>
+               <TD class="c5"><SPAN>{{name.total_payout}}</SPAN></TD>
+            </TR>
+            {% endfor %}
+        </tbody>
     </table>
 
   {% else %}
