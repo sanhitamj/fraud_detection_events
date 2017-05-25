@@ -21,16 +21,13 @@ def score():
     json_input = request.get_json()
     tlm = tyler_logit_model()
     prob, prediction = tlm.predict(json_input)
-    print "-" * 50
-    print "RAW"
-    print '{}'.format(json_input)
-    print "-" * 50
-    print "type"
-    print type('{}'.format(json_input))
-    print "-" * 50
-    print "dir"
-    print dir('{}'.format(json_input))
-    insert_vals(prob.astype(np.float64), prediction.astype(int), '{}'.format(json_input), user='tyler')
+
+
+    insert_vals(prob.astype(np.float64),
+                prediction.astype(int),
+                '{}'.format(json_input),
+                user='tyler'
+               )
 
     return render_template('score.html', name=prediction)
 
@@ -38,6 +35,14 @@ def score():
 @app.route('/scoredebug', methods=['GET', 'POST'])   #map web page to address with decorator
 def scoredebug():
     sqlbase = read_vals(user='tyler')
+    # jd = json.JSONDecoder()
+    sqlbase = [x[3] for x in sqlbase]
+    print sqlbase
+    # indices = [x[0] for x in sqlbase]
+    # probas = [x[1] for x in sqlbase]
+    # fraud_flags = [x[2] for x in sqlbase]
+    # event_names = [x[3] for x in sqlbase]
+    # org_names = [x[4] for x in sqlbase]
     return render_template('score.html', name=sqlbase)
 
 if __name__ == "__main__":
