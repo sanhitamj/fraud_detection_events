@@ -96,6 +96,7 @@ rf.score(X_test, y_test)
 print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
 ```
 
+|Predcted |Observed  |
 |--|--|
-|TN: 3242 | FP: 19 |
-|FN: 30   | TP: 288|
+|TP: 288 | FP: 19 |
+|FN: 30   | TN: 3242|
