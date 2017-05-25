@@ -41,6 +41,7 @@ df['account_life'] = df['account_life'].dt.days
 |has_analytics(%)|0.3|8|
 |payout_type (exists %)|65|99|
 |previous_payout (mean of amount)|183|2340|
+|Unused| | |
 |listed(%)|83|85|
 |has_header (%)|7| 21|
 |show_map (%) |75 | 85|
@@ -80,9 +81,11 @@ Observed high p-values for some features
 
 # Gradient Boost
 
+Tried, but did not give much improvement in confusion_matrix after GridSearch.
+
 # Random Forests
 
-Train-Test: 0.75-0.25
+Train-Test Split: 0.75-0.25
 Model parameters used -
 
 ```python
@@ -92,7 +95,7 @@ rf.score(X_test, y_test)
 = 0.986
 print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
 ```
-| | |
+
 |--|--|
 |TN: 3242 | FP: 19 |
 |FN: 30   | TP: 288|
