@@ -18,6 +18,28 @@ df['fraud'] = df['acct_type'].str.contains("fraud")
 ### Feature Selection
 
 ---
+
+![Ratio for fraud to not-fraud](images/feature_imp.png)
+
+![Ratio for fraud to not-fraud](images/feature_imp_single_bar.png)
+
+Relative ratios of features for fraud and not-fraud
+
+| Feature | Fraud | Not Fraud |
+| --------| ----- | --------- |
+| Account life| 0.18 | 0.82|
+| fb_published| 0.13| 0.86|
+|org_facebook |0.1|0.99|
+|org_twitter|0.04|0.95|
+|has_analytics|0.03|0.96|
+|payout_type (exists)|0.4|0.6|
+|event_life|0.39|0.6|
+|Unused| | |
+|listed(%)|0.49|0.51|
+|show_map (%) |0.46 | 0.54|
+|has_logo (%)| 0.43| 0.57 |
+
+
 Short Descriptions ('body_length')
 
 Fraudulent descriptions are most likely to have descriptions below 23 characters.
@@ -32,20 +54,7 @@ df['account_life'] = df['event_created'] - df['user_created']
 df['account_life'] = df['account_life'].dt.days
 ```
 
-| Feature | Fraud | Not Fraud |
-| --------| ----- | --------- |
-| Account life| 82 | 402 (days)|
-| fb_published(%)| 2| 13|
-|org_facebook (mean)|1|8.6|
-|org_twitter(mean)|0.29|4.6|
-|has_analytics(%)|0.3|8|
-|payout_type (exists %)|65|99|
-|previous_payout (mean of amount)|183|2340|
-|Unused| | |
-|listed(%)|83|85|
-|has_header (%)|7| 21|
-|show_map (%) |75 | 85|
-|has_logo (%)| 64| 86 |
+
 
 
 The 87 days are likely due to fraud being identified late.
