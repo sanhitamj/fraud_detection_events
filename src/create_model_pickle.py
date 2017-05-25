@@ -51,7 +51,6 @@ class tyler_logit_model():
 
         with open(self.lrmodel, 'r') as f:
             lr = pickle.load(f)
-        print lr
 
         prob = lr.predict_proba(X)[:, 1]
 
@@ -91,11 +90,11 @@ if __name__ == '__main__':
 
 
     # Fit models (ONE TIME USE)
-    # models = [tyler_logit_model]
-    # model_names = ["tyler_logit"]
-    # for model, name in zip(models, model_names):
-    #     currentmod = model()
-    #     currentmod.fit(relative_dir)
+    models = [tyler_logit_model]
+    model_names = ["tyler_logit"]
+    for model, name in zip(models, model_names):
+        currentmod = model()
+        currentmod.fit(relative_dir)
 
 
     ### API LINES FOR PREDICTION
@@ -103,3 +102,4 @@ if __name__ == '__main__':
     tlm = tyler_logit_model()
     json_str = get_json()
     tlm.predict(json_str, threshold=0.3)
+    # print tlm.X_temp['total_payout']
