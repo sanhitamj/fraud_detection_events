@@ -1,23 +1,12 @@
-# fraud_detection_events
+# Fraud Detection Case Study
+# Galvanize Data Science Immersive
 Fraud Detection Model for &lt;event-company>. Data is not included due to confidentiality.
 
 ---
 
-# Pre-processing
-
----
-
-Identify Fraudulent Response variable
-
-```python
-df['fraud'] = df['acct_type'].str.contains("fraud")
-```
-
----
 
 ### Feature Selection
 
----
 
 To train the model, 250MB of JSON data was provided by the company.  The dataset is structured with users labeled in several classes, but importantly, the known fraud events are labeled.   The event training data has 43 features, many of which are not useful for predicting fraud.   
 
@@ -31,7 +20,7 @@ To determine the principle features to include in our model training set, we det
 __Relative ratios of features for fraud and not-fraud (examples)__
 
 | Feature | Fraud | Not Fraud | Feature Separation | Description |
-| --------| ----- | --------- | ----------- | --------- | 
+| --------| ----- | --------- | ----------- | --------- |
 | Account life| 0.18 | 0.82| 4.63 |Number of days from user creation to event date |
 | fb_published| 0.13| 0.86| 6.15 | Was event published on FaceBook ? |
 |org_facebook |0.1|0.99| 9.09 | Number of users in Facebook Group |
@@ -49,12 +38,6 @@ __Relative ratios of features for fraud and not-fraud (examples)__
 |show_map |0.46 | 0.54| 1.17 |
 |has_logo | 0.43| 0.57 | 1.32 |
 
-
-Short Descriptions ('body_length')
-
-Fraudulent descriptions are most likely to have descriptions below 23 characters.
-
-![Description Ratio](images/cutoff.png)
 
 ---
 Account life
@@ -84,6 +67,12 @@ A class definition "pipeline_json" was implemented to transform and scale the da
 The class instance is used in both fitting the training data as well as predicting on out-of-sample data.  
 
 Within the class, multiple methods are used to convert the data fields of interest into binary boolean values, continuous values, as well as return the labeled results array separately.
+
+Example:
+```python
+df['fraud'] = df['acct_type'].str.contains("fraud")
+```
+
 
 The class instance provides an advantage over a simple method because a scaling transformation from the sklearn.StandardScaler can be stored in the class instance.  The training data set scaling parameters are then used to scale the out-of-sample data, ensuring consistent predictive power.
 
@@ -143,6 +132,6 @@ print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
 # Presentation Dashboard
 
 A Flask web app was implemented to draw fraudulent events from the PostgreSQL database.  The fraudulent events are scored and sorted by risk-adjusted-value, where :
-* risk_score = probability_of_risk * total_payout
+* risk_score = probability_of_fraud * total_payout
 
 This allows company fraud investigators to quickly focus on the events most likely to have the largest financial impact to the company.
