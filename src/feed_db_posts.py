@@ -9,3 +9,4 @@ if __name__ == "__main__":
         url = "http://127.0.0.1:5000/score"
         r = requests.post(url, json=get_json())
         sleep(15)
+        print "GET {} json".format{i}
