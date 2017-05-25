@@ -32,6 +32,10 @@ df['account_life'] = df['event_created'] - df['user_created']
 df['account_life'] = df['account_life'].dt.days
 ```
 
+![e importance](images/feature_imp.png)
+
+
+
 | Feature | Fraud | Not Fraud |
 | --------| ----- | --------- |
 | Account life| 82 | 402 (days)|
