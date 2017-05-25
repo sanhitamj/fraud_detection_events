@@ -48,11 +48,14 @@ def scoredebug():
                "name",
                "tot_payout"
               ]
-    print type(sqlbase)
-    for elem in sqlbase[0]:
-        print type(elem)
 
-    return render_template('score.html', name=sqlbase, headers=headers)
+    sqlbase_fixed = []
+    for item in sqlbase:
+        newitem = [x.decode('utf8') if isinstance(x, basestring) else x for x in item]
+        sqlbase_fixed.append(newitem)
+
+
+    return render_template('score.html', name=sqlbase_fixed, headers=headers)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

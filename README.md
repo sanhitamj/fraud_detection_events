@@ -28,17 +28,17 @@ __Relative ratios of features for fraud and not-fraud (examples)__
 | Feature | Fraud | Not Fraud | Feature Separation | Description |
 | --------| ----- | --------- | ----------- | --------- |
 | total_payout | 0.01 | 0.98 |  76.5 | Total amount payed out after event |
-| payout_count| 0.02|0.98| Number of times the account was paid to |
+| payout_count| 0.02|0.98| 43.57 |Number of times the account was paid to |
 |has_analytics|0.03|0.96| 25.85 | Was analytics used in the event planning web page ? |
-|org_twitter|0.04|0.95| 19.61 | Number of Twitter followers of event |
+| org_twitter|0.04|0.95| 19.61 | Number of Twitter followers of event |
 | fb_published| 0.13| 0.86| 6.15 | Was event published on FaceBook ? |
-| ticket_sales_count|0.05|0.95| How many tickets were sold |
+| ticket_sales_count|0.05|0.95| 18.09| How many tickets were sold |
 |org_facebook |0.1|0.99| 9.09 | Number of users in Facebook Group |
 | account_life| 0.18 | 0.82| 4.63 |Number of days from user creation to event date |
 | wc_description | 0.33| 0.66  | 2.01 | Number of words in event description |
 |payout_type (exists)|0.4|0.6| 1.53 | Method of payment after the event |
-| eu_currency|0.64|0.35| If EU currencies (euro, GBP) were used for the transaction |
-|has_header|0.72|0.2| If there is header in the event information|
+| eu_currency|0.64|0.35| 1.82 | If EU currencies (euro, GBP) were used for the transaction |
+|has_header|0.72|0.2| 2.6 | If there is header in the event information|
 |event_life|0.39|0.6| 8.55 | Number of days between event creation and event end |
 
 
