@@ -1,6 +1,8 @@
 # Fraud Detection Case Study
 # Galvanize Data Science Immersive
-Fraud Detection Model for &lt;event-company>. Data is not included due to confidentiality.
+
+-- Tyler Carstensen, Wallace Printz, Sanhita Joshi
+Fraud Detection Model for &lt;event-company>. Dataset is not shared on git due to confidentiality.
 
 ---
 
@@ -8,9 +10,9 @@ Fraud Detection Model for &lt;event-company>. Data is not included due to confid
 ### Feature Selection
 
 
-To train the model, 250MB of JSON data was provided by the company.  The dataset is structured with users labeled in several classes, but importantly, the known fraud events are labeled.   The event training data has 43 features, many of which are not useful for predicting fraud.   
+To train the model to predict fraud or not-fraud, 250MB of JSON data (14000+ rows) was provided by the company.  The dataset is structured with users labeled in several classes, but importantly, the known fraud events are labeled. The event training data has 43 features, many of which are not useful for predicting fraud.   
 
-To determine the principle features to include in our model training set, we determined individual feature separation distance between fraudn and non-fraud events.  For example, if Feature 1 has a mean value of 2 for fraud events and a mean value of 20 for non-fraud events, we consider this separation 10X and is a good feature to use for model fitting.
+To determine the principle features to include in our model training set, we determined individual feature separation distance between fraud and non-fraud events. For example, if Feature 1 has a mean value of 2 for fraud events and a mean value of 20 for non-fraud events, we consider this separation 10X and is a good feature to use for model fitting. We used features for which separation is more than 1.5X.
 
 
 ![Ratio for fraud to not-fraud](images/feature_imp.png)
@@ -21,15 +23,19 @@ __Relative ratios of features for fraud and not-fraud (examples)__
 
 | Feature | Fraud | Not Fraud | Feature Separation | Description |
 | --------| ----- | --------- | ----------- | --------- |
-| Account life| 0.18 | 0.82| 4.63 |Number of days from user creation to event date |
-| fb_published| 0.13| 0.86| 6.15 | Was event published on FaceBook ? |
-|org_facebook |0.1|0.99| 9.09 | Number of users in Facebook Group |
-|org_twitter|0.04|0.95| 19.61 | Number of Twitter followers of event |
+| total_payout | 0.01 | 0.98 |  76.5 | Total amount payed out after event |
+| payout_count| 0.02|0.98| Number of times the account was paid to |
 |has_analytics|0.03|0.96| 25.85 | Was analytics used in the event planning web page ? |
+|org_twitter|0.04|0.95| 19.61 | Number of Twitter followers of event |
+| fb_published| 0.13| 0.86| 6.15 | Was event published on FaceBook ? |
+| ticket_sales_count|0.05|0.95| How many tickets were sold |
+|org_facebook |0.1|0.99| 9.09 | Number of users in Facebook Group |
+| account_life| 0.18 | 0.82| 4.63 |Number of days from user creation to event date |
+| wc_description | 0.33| 0.66  | 2.01 | Number of words in event description |
 |payout_type (exists)|0.4|0.6| 1.53 | Method of payment after the event |
+| eu_currency|0.64|0.35| If EU currencies (euro, GBP) were used for the transaction |
+|has_header|0.72|0.2| If there is header in the event information|
 |event_life|0.39|0.6| 8.55 | Number of days between event creation and event end |
-| wc_description |  |  | 2.01 | Number of words in event description |
-| total_payout |  |  |  76.5 | Total amount payed out after event |
 
 
 |*Unused* (examples)| Fraud | Not Fraud | Feature Separation |
@@ -40,50 +46,53 @@ __Relative ratios of features for fraud and not-fraud (examples)__
 
 
 ---
-Account life
+Some example code used to find if the feature was important or not -
 
 ```python
-df['account_life'] = df['event_created'] - df['user_created']
-df['account_life'] = df['account_life'].dt.days
+fraud = df[df['acct_type'].str.contains('fraud')][col].mean()
+not_fraud = df[~df['acct_type'].str.contains('fraud')][col].mean()
+separation = fraud / not_fraud
 ```
 
 
-
-
-The 87 days are likely due to fraud being identified late.
+The plot below is for one feature, we used in the model, account_life. On x-axis is the number of days for which the account is active; y-axis represents the ratio of fraud to genuine accounts' numbers, for the corresponding x-axis value. For genuine accounts, account_life is more than 4 times than the fraud accounts on an average.
 
 ![Description Ratio](images/acctcutoff.png)
 
 
-It is better to leave this as a scaled linear feature.
-
-
 ---
 # Data Pipeline
-_Used for coworking in git using merges_
+
+*Converting features into continuous or categorical numbers*
 
 A class definition "pipeline_json" was implemented to transform and scale the data in order to convert the JSON data files into model-ready Pandas dataframes.
 
-The class instance is used in both fitting the training data as well as predicting on out-of-sample data.  
+This class instance is used in both fitting the training data as well as predicting on out-of-sample or unseen data.  
 
 Within the class, multiple methods are used to convert the data fields of interest into binary boolean values, continuous values, as well as return the labeled results array separately.
 
-Example:
+Example code for converting event description into a continuous variable:
+
 ```python
-df['fraud'] = df['acct_type'].str.contains("fraud")
+from BeautifulSoup import BeautifulSoup
+lst = []
+for i in xrange(len(df)):
+    lst.append(len(BeautifulSoup(df['description'][i]).text))
 ```
 
+*Scaling and normalizing the features*
 
-The class instance provides an advantage over a simple method because a scaling transformation from the sklearn.StandardScaler can be stored in the class instance.  The training data set scaling parameters are then used to scale the out-of-sample data, ensuring consistent predictive power.
+The class instance provides an advantage over a simple method because a scaling transformation from the sklearn.StandardScaler can be stored in the class instance. The training dataset scaling parameters were saved; and are later used to scale the out-of-sample data. This ensures consistent scaling and hence better predicting power of the model.
 
 ---
 # Model fitting
 
 Multiple models were tested using a 75/25 train-test split.  Predictive power was determined by ROC curves and confusion matrices, when possible.
 
-# Logistic Regression
+# Preliminary models
+*Logistic Regression*
 
-Fit and tested on a ROC curve
+Logistic Regression from stat.models and sci-kit-learn was used to fit a model. This is a ROC curve from a model-fit.
 
 ![roc](images/roc_curve.png)
 
@@ -93,18 +102,19 @@ We lost accuracy by selecting a good threshold - but the intent was to capture m
 
 ---
 
-Observed high p-values for some features
-![pvalues](images/pvalues.png)
+<!-- Observed high p-values for some features
+![pvalues](images/pvalues.png) -->
 
 
-# Gradient Boost
+*Other models*
 
-Tried, but did not give much improvement in confusion_matrix after GridSearch.
+Other models like GradientBoost and AdaBoostClassifier were tried, but did not give much improvement in confusion_matrix after GridSearch.
 
 # Random Forests
 
-Train-Test Split: 0.75-0.25
-Model parameters used -
+We used the same train-test split fraction of 0.75/0.25 to fit random forest models on the data.
+
+The best Model parameters found using GridSearch are -
 
 ```python
 from sklearn.ensemble import RandomForestClassifier as RF
