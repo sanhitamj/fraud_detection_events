@@ -22,7 +22,7 @@ def read_vals(user=user):
     #Read all values in table and return row-wise entries
     conn = psycopg2.connect(dbname = db, port=5432, password='', user=user, host='localhost')
     cur = conn.cursor()
-    query = '''SELECT prob, predict, org_name, name, tot_payout, risk_score FROM events;'''
+    query = '''SELECT prob, predict, org_name, name, tot_payout, risk_score FROM events ORDER BY risk_score desc;'''
     cur.execute(query)
     rows = cur.fetchall()
     cur.close()
