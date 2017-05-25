@@ -36,7 +36,7 @@ from bs4 import BeautifulSoup
 
 
 class pipeline_json(object):
-# 
+#
 # <<<<<<< HEAD
 #     def __init__(self, json_dir="../data/data.json"):
 #         try:
@@ -47,9 +47,13 @@ class pipeline_json(object):
 #
 # =======
     def __init__(self, json_dir="../data/data.json", scaler=None):
-        self.orig_df = pd.read_json(json_dir)
-        self.scaler = scaler
-
+        try:
+            self.orig_df = pd.read_json(json_dir)
+            self.scaler = scaler
+        except ValueError:
+            query_df = pd.DataFrame.from_dict(json_dir,  orient='index')
+            query_df = query_df.transpose()
+            self.orig_df = query_df
 
     def convert_to_df(self, scaling=False, filtered=False):
         #Avoid re-reading JSON file every time conversion is done by copying original dataframe.
@@ -118,7 +122,8 @@ class pipeline_json(object):
         self.df['eu_currency'] = self.df['currency'].map(lambda x: 1 if x in ("EUR", "GBP") else 0)
 
         #Condition Response variable fraud flag
-        self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
+        if 'acct_type' in self.df.columns:
+            self.df['fraud'] = self.df['acct_type'].str.contains("fraud")
 
 
         # Account life of accounts

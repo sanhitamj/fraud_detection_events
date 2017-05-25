@@ -1,5 +1,18 @@
 """
 RUN THIS FILE FROM SRC
+
+    # Fit models (ONE TIME USE)
+    models = [tyler_logit_model]
+    model_names = ["tyler_logit"]
+    for model, name in zip(models, model_names):
+        currentmod = model()
+        currentmod.fit(relative_dir)
+
+
+    ### API LINES FOR PREDICTION
+    #Logit Model
+    tlm = tyler_logit_model()
+    tlm.predict(json_data, threshold=0.3)
 """
 
 import random
@@ -60,9 +73,15 @@ if __name__ == '__main__':
     filename = os.path.join(direc, relative_dir)
 
 
-    # Dump all listed models to the model folder
-    models = [tyler_logit_model]
-    model_names = ["tyler_logit"]
-    for model, name in zip(models, model_names):
-        currentmod = model()
-        currentmod.fit(relative_dir)
+    # Fit models (ONE TIME USE)
+    # models = [tyler_logit_model]
+    # model_names = ["tyler_logit"]
+    # for model, name in zip(models, model_names):
+    #     currentmod = model()
+    #     currentmod.fit(relative_dir)
+
+
+    ### API LINES FOR PREDICTION
+    #Logit Model
+    tlm = tyler_logit_model()
+    tlm.predict(json_data, threshold=0.3)
