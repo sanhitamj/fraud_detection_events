@@ -32,11 +32,6 @@ df['account_life'] = df['event_created'] - df['user_created']
 df['account_life'] = df['account_life'].dt.days
 ```
 
-|"" | Account life|
-|---|---|
-Fraud| 87|
-Non-Fraud| 402|
-
 | Feature | Fraud | Not Fraud |
 | --------| ----- | --------- |
 | Account life| 82 | 402 (days)|
@@ -46,6 +41,7 @@ Non-Fraud| 402|
 |has_analytics(%)|0.3|8|
 |payout_type (exists %)|65|99|
 |previous_payout (mean of amount)|183|2340|
+|Unused| | |
 |listed(%)|83|85|
 |has_header (%)|7| 21|
 |show_map (%) |75 | 85|
@@ -82,3 +78,25 @@ We lost accuracy by selecting a good threshold - but the intent was to capture m
 Observed high p-values for some features
 ![pvalues](images/pvalues.png)
 
+
+# Gradient Boost
+
+Tried, but did not give much improvement in confusion_matrix after GridSearch.
+
+# Random Forests
+
+Train-Test Split: 0.75-0.25
+Model parameters used -
+
+```python
+from sklearn.ensemble import RandomForestClassifier as RF
+rf = RF(n_estimators=50, min_samples_split=20, min_samples_leaf=1,   min_impurity_split=1e-5, max_depth = 30, oob_score=True)
+rf.score(X_test, y_test)
+= 0.986
+print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
+```
+
+|Predcted |Observed  |
+|--|--|
+|TP: 288 | FP: 19 |
+|FN: 30   | TN: 3242|
