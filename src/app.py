@@ -21,14 +21,13 @@ def score():
     json_input = request.get_json()
     tlm = tyler_logit_model()
     prob, prediction = tlm.predict(json_input)
-    dataframe = tlm.X_temp
-    tot_payout = dataframe['total_payout']
-    risk_score = (tot_payout * prob)
+    tot_payout = sum([previous['amount'] for previous in json_input['previous_payouts']])
+    risk_score = (float(tot_payout) * float(prob))
 
-    insert_vals(float(prob), # From model
+    insert_vals(round(float(prob), 4), # From model
                 int(prediction), # From model
-                json_input['org_name'], # From JSON
-                json_input['name'],
+                unicode(json_input['org_name']), # From JSON
+                unicode(json_input['name']),
                 float(tot_payout),
                 float(risk_score),
                 '{}'.format(json_input),
@@ -41,14 +40,17 @@ def score():
 @app.route('/scoredebug', methods=['GET', 'POST'])   #map web page to address with decorator
 def scoredebug():
     sqlbase = read_vals(user='tyler')
-    headers = ["probability",
+    headers = [
+               "risk_score",
+               "probability",
                "predict",
                "org_name",
                "name",
-               "tot_payout",
-               "risk_score",
-               "json_str"
+               "tot_payout"
               ]
+    print type(sqlbase)
+    for elem in sqlbase[0]:
+        print type(elem)
 
     return render_template('score.html', name=sqlbase, headers=headers)
 
