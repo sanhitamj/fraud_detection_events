@@ -32,7 +32,7 @@ df['account_life'] = df['event_created'] - df['user_created']
 df['account_life'] = df['account_life'].dt.days
 ```
 
-![e importance](images/feature_imp.png)
+![Ratio for fraud to not-fraud](images/feature_imp.png)
 
 
 
