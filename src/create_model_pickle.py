@@ -5,6 +5,7 @@ RUN THIS FILE FROM SRC
 import random
 import cPickle as pickle
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import normalize, scale, StandardScaler
 from pipeline import pipeline_json
 import os
 import numpy as np
@@ -13,29 +14,44 @@ import numpy as np
 class tyler_logit_model():
     """Pipelines test data and fits to an object"""
     def __init__(self):
-        self.model = None
+        self.scaler_loc = "../models/logit_scaler.pkl"
+        self.lrmodel = "../models/logit_model.pkl"
 
     def fit(self, data):
         """Fits an external json or path"""
 
         X, y = self._pipe_data(data, response=True)
-        lr = LogisticRegression()
+        lr = LogisticRegression(class_weight='balanced', n_jobs=-1, C=0.1)
         lr.fit(np.array(X), np.array(y))
 
-        self.model = lr
+        with open(self.lrmodel, 'w') as f:
+            pickle.dump(self.lrmodel, f)
 
 
     def predict(self, data, threshold=0.5):
-        X = self._pipe_data(data, response=False)
-        return self.model.predict_proba(X)[:, 1] > threshold
+        with open(self.scaler_loc, 'r') as f:
+            scaler = pickle.load(f)
+
+        X = self._pipe_data(data, response=False, scaler=scaler)
+
+        with open(self.lrmodel, 'r') as f:
+            lr = pickle.load(f)
+
+        return lr.predict_proba(X)[:, 1] > threshold
 
     def _pipe_data(self, data, response=False):
         pj = pipeline_json(data)
         X = pj.convert_to_df(scaling=True, filtered=True)
+
+        with open(self.scaler_loc, 'w') as f:
+            pickle.dump(pj.scaler, f)
+
         if response:
             y = pj.output_labelarray()
             return X, y
         return X
+
+
 
 
 if __name__ == '__main__':
@@ -50,6 +66,3 @@ if __name__ == '__main__':
     for model, name in zip(models, model_names):
         currentmod = model()
         currentmod.fit(relative_dir)
-        model_name = "../models/" + name + ".pkl"
-        with open(model_name, 'w') as f:
-            pickle.dump(model, f)

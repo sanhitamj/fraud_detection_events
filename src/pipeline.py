@@ -37,9 +37,9 @@ from bs4 import BeautifulSoup
 
 class pipeline_json(object):
 
-    def __init__(self, json_dir="../data/data.json"):
+    def __init__(self, json_dir="../data/data.json", scaler=None):
         self.orig_df = pd.read_json(json_dir)
-
+        self.scaler = scaler
 
     def convert_to_df(self, scaling=False, filtered=False):
         #Avoid re-reading JSON file every time conversion is done by copying original dataframe.
@@ -186,15 +186,16 @@ class pipeline_json(object):
                     'wc_description'
                     ]
 
-
-        for feature in features:
+        if not self.scaler:
             ss = StandardScaler()
-            self.df[feature] = ss.fit_transform(self.df[feature].values.reshape((-1, 1)))
+            scaled_columns = ss.fit_transform(self.df[features])
+            self.scaler = ss
+        else:
+            scaled_columns = self.scaler.fit_transform(self.df[features])
 
-
-
-
-
+        for idx, column in enumerate(features):
+            print column, idx
+            self.df[column] = scaled_columns[:, idx]
 
     def _filter_features(self):
         features_to_keep = [
