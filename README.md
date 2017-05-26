@@ -172,4 +172,18 @@ This allows company fraud investigators to quickly focus on the events most like
 
 # How to run the code
 
-* Dependencies -
+Dependencies Required:
+* psycopg2
+* bs4
+* sklearn
+* pandas
+* time
+* requests
+* json
+* random
+* cPickle
+* os
+* numpy
+
+Command line operation:
+* [insert commands here]
