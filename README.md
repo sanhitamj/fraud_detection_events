@@ -127,10 +127,10 @@ rf.score(X_test, y_test)
 print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
 ```
 
-|Predicted |Observed  |
-|--|--|
-|TP: 288 | FP: 19 |
-|FN: 30   | TN: 3242|
+| |Predicted True | Predicted False  |
+| --- | --- | --- |
+| Actual True|TP: 288 | FP: 19 |
+| Actual False|FN: 30   | TN: 3242|
 
 
 ---
