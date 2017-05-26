@@ -1,9 +1,9 @@
 # Fraud Detection Case Study
 
 Authors:
-* Tyler Carstensen
-* Wallace Printz
-* Sanhita Joshi
+* [Tyler Carstensen](https://github.com/tylerc-atx/)
+* [Wallace Printz](https://github.com/WPrintz)
+* [Sanhita Joshi](https://github.com/sanhitamj)
 
 Fraud Detection Model for &lt;event-company>. Dataset is not shared on git due to confidentiality.
 
@@ -127,10 +127,12 @@ rf.score(X_test, y_test)
 print 'Confusion matrix :\n', confusion_matrix(y_test, y_pred)
 ```
 
-|Predicted |Observed  |
-|--|--|
-|TP: 288 | FP: 19 |
-|FN: 30   | TN: 3242|
+__Confusion Matrix :__
+
+| |__Actual True__ | __Actual False__  |
+| ------| ----|---|
+| __Predicted True__|TP: 288 | FP: 19 |
+| __Predicted False__|FN: 30   | TN: 3242|
 
 
 ---
