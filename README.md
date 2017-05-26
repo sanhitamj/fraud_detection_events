@@ -167,3 +167,9 @@ A Flask web app was implemented to draw fraudulent events from the PostgreSQL da
 This allows company fraud investigators to quickly focus on the events most likely to have the largest financial impact to the company.
 
 ![Dashboard](images/dashboard.png)
+
+---
+
+# How to run the code
+
+* Dependencies -
